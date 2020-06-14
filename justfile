@@ -1,7 +1,7 @@
 alias r := run
 run:
     python3 gen.py
-    just bg
+    # just bg
 
 pic:
     sxiv background.png &

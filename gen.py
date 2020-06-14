@@ -1,4 +1,5 @@
 from PIL import Image
+import noise
 import numpy as np
 import random
 import math
@@ -6,15 +7,13 @@ import math
 def main():
     HEIGHT = 1080
     WIDTH = 1920
-    SIZEX = 20
-    SIZEY = 14
-    OFFSET = 10 
+    SIZEX = 40
+    SIZEY = 30
+    OFFSET = 15 
     base_color = init_color()
     base_color = [76, 173, 128]
 
     img = np.zeros([HEIGHT,WIDTH,3],dtype=np.uint8)
-    img.fill(255)
-
     for yi, y in enumerate(range(0, HEIGHT, SIZEY)):
         for xi, x in enumerate(range(-SIZEX, WIDTH, SIZEX)):
             rand = random_color(base_color)
@@ -25,7 +24,9 @@ def main():
 
     print(base_color)
     add_noise(img)
-    save_image(img)
+    #perlin_noise(img)
+    #draw_box(base_color, HEIGHT, WIDTH, img)
+    save_image(img, "background.png")
 
 def add_noise(img):
     w, h, _ = img.shape
@@ -34,7 +35,19 @@ def add_noise(img):
             if random.randint(0, 100) < 50:
                 img[x,y] = np.subtract(img[x,y], 10)
 
-def draw_box():
+def perlin_noise(img):
+    w, h, _ = img.shape
+    for x in range(w):
+        for y in range(h):
+            n = noise.pnoise2(x/10, 
+                            y/10, 
+                            octaves=6, 
+                            persistence=.7, 
+                            lacunarity=1.7, 
+                            base=0)
+            img[x, y] = np.subtract(img[x,y], 20*(n+1))
+
+def draw_box(base_color, HEIGHT, WIDTH, img):
     diameter = 500
     border = 10
     border_color = np.subtract(255, base_color)
@@ -61,9 +74,9 @@ def random_color(color):
             int(min(math.pow(color[x], 1.02), 255)),
         ), [0, 1, 2]))
 
-def save_image(nparray):
+def save_image(nparray, name):
     im = Image.fromarray(nparray)
-    im.save("background.png")
+    im.save(name)
 
 if __name__ == "__main__":
     main()
