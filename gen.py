@@ -7,11 +7,11 @@ import math
 def main():
     HEIGHT = 1080
     WIDTH = 1920
-    SIZEX = 40
-    SIZEY = 30
-    OFFSET = 15 
+    SIZEX = 50
+    SIZEY = 75
+    OFFSET = 60 
     base_color = init_color()
-    base_color = [76, 173, 128]
+    base_color = [200, 50, 50]
 
     img = np.zeros([HEIGHT,WIDTH,3],dtype=np.uint8)
     for yi, y in enumerate(range(0, HEIGHT, SIZEY)):
